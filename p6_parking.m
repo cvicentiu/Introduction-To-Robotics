@@ -3,7 +3,7 @@
 %run('startup_rvc.m')
 
 % intial position
-x_initial = 10;
+%x_initial = 10;
 y_initial = 10;
 
 car_width = 2;
