@@ -1,17 +1,18 @@
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Terrain {
+	BufferedImage background;
 
-	public Terrain() {
+	public Terrain(String filename) throws IOException {
+		background = ImageIO.read(new File(filename));
 	}
 
 	public void draw(Graphics g) {
-	}
-
-	public void move(double viteza) {
+		g.drawImage(background, 0, 0, null);
 	}
 }

@@ -1,18 +1,29 @@
 import java.awt.*;
+import java.io.IOException;
 
 import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Main extends JPanel {
-	public static int CANVAS_WIDTH = 500;
-	public static int CANVAS_HEIGHT = 500;
-	public static String TITLE = "Introduction to Robotics - Car";
+	public final static int CANVAS_WIDTH = 580;
+	public final static int CANVAS_HEIGHT = 550;
+	public final static String TITLE = "Introduction to Robotics - Car";
+	public final static String TERRAIN_FILENAME = "track.jpg";
+	public final static String CAR_FILENAME = "beetle-red.gif";
+
+	public static Terrain t;
+	public static Car c;
 
 	public Main() {
 		Thread animationThread = new Thread() {
 			@Override
 			public void run() {
 				// TODO: Write program logic.
+				while (c.x < 450) {
+					c.move(1);
+					pause(10);
+					repaint();
+				}
 			};
 		};
 		animationThread.start(); // start the thread to run animation
@@ -26,9 +37,13 @@ public class Main extends JPanel {
 		super.paintComponent(g); // paint background
 
 		/* TODO drawings */
+		t.draw(g);
+		c.draw(g);
 	}
 
-	public static void init() {
+	public static void init() throws IOException {
+		t = new Terrain(TERRAIN_FILENAME);
+		c = new Car(140, 90, 180, CAR_FILENAME);
 	}
 
 	public static void pause(int time) {
@@ -40,8 +55,12 @@ public class Main extends JPanel {
 		}
 	}
 
-	/** The entry main() method */
-	public static void main(String[] args) {
+	/**
+	 * The entry main() method
+	 * 
+	 * @throws IOException
+	 */
+	public static void main(String[] args) throws IOException {
 		init();
 
 		pause(100);
