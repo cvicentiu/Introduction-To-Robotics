@@ -2,3 +2,4 @@ venv/
 *.png
 *.pyc
 bin/
+CarGUI/bin/
