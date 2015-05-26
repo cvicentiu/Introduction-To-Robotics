@@ -19,9 +19,11 @@ public class Main extends JPanel {
 			@Override
 			public void run() {
 				// TODO: Write program logic.
-				while (c.x < 450) {
-					c.move(1);
-					pause(10);
+				while (c.y < 420) {
+					c.move(3);
+					if (c.x > 410 && c.direction < 90)
+						c.direction += 1;
+					pause(15);
 					repaint();
 				}
 			};
@@ -43,7 +45,7 @@ public class Main extends JPanel {
 
 	public static void init() throws IOException {
 		t = new Terrain(TERRAIN_FILENAME);
-		c = new Car(140, 90, 180, CAR_FILENAME);
+		c = new Car(100, 90, 0, CAR_FILENAME);
 	}
 
 	public static void pause(int time) {

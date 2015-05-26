@@ -18,18 +18,18 @@ public class Car {
 		car = ImageIO.read(new File(filename));
 		this.x = x;
 		this.y = y;
-		this.direction = Math.toRadians(direction);
+		this.direction = direction;
 	}
 
 	public void draw(Graphics g) {
 		AffineTransform tr = new AffineTransform();
 		Graphics2D g2d = (Graphics2D) g;
 
-		tr.translate(x, y);
-		tr.rotate(direction);
+		tr.translate(x - (car.getWidth() / 2), y - (car.getHeight() / 2));
+		tr.rotate(Math.toRadians(180) + Math.toRadians(direction));
 		g2d.setTransform(tr);
 
-		g.drawImage(car, 0, 0, null);
+		g.drawImage(car, -car.getWidth() / 2, -car.getHeight() / 2, null);
 
 		try {
 			g2d.setTransform(tr.createInverse());
@@ -40,6 +40,10 @@ public class Car {
 	}
 
 	public void move(double speed) {
-		x += speed;
+		double sin = Math.sin(Math.toRadians(direction));
+		double cos = Math.cos(Math.toRadians(direction));
+
+		x += cos * speed;
+		y += sin * speed;
 	}
 }
