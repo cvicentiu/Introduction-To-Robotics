@@ -13,17 +13,23 @@ public class Main extends JPanel {
 
 	public static Terrain t;
 	public static Car c;
-
+	public static CarSimulator sim = new CarSimulator(new Vector2D(300, 300), new Vector2D(1, 0));
+	
 	public Main() {
 		Thread animationThread = new Thread() {
 			@Override
 			public void run() {
-				// TODO: Write program logic.
-				while (c.y < 420) {
-					c.move(3);
-					if (c.x > 410 && c.direction < 90)
-						c.direction += 1;
-					pause(15);
+				int frame = 0;
+				
+				while (true) {
+					frame++;
+					sim.giveCommand(Math.signum(Math.sin((frame- 1) / 88.0f) - Math.sin(frame / 88.0f)), 1);
+					pause(10);					
+					sim.executeCommand(10);
+					
+					c.x = (int) Math.round(sim.position.x);
+					c.y = (int) Math.round(sim.position.y);
+					c.direction = Math.PI + Math.atan2(sim.forward.y, sim.forward.x);
 					repaint();
 				}
 			};
