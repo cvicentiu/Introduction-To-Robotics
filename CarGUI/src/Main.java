@@ -5,10 +5,9 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Main extends JPanel {
-	public final static int CANVAS_WIDTH = 580;
-	public final static int CANVAS_HEIGHT = 550;
+	public final static int CANVAS_WIDTH = 600;
+	public final static int CANVAS_HEIGHT = 600;
 	public final static String TITLE = "Introduction to Robotics - Car";
-	public final static String TERRAIN_FILENAME = "track.jpg";
 	public final static String CAR_FILENAME = "beetle-red.gif";
 
 	public static Terrain t;
@@ -53,7 +52,7 @@ public class Main extends JPanel {
 	}
 
 	public static void init() throws IOException {
-		t = new Terrain(TERRAIN_FILENAME);
+		t = new Terrain();
 		c = new Car(100, 90, 0, CAR_FILENAME);
 	}
 
