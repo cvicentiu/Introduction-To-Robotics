@@ -25,7 +25,7 @@ public class Car {
 		AffineTransform tr = new AffineTransform();
 		Graphics2D g2d = (Graphics2D) g;
 
-		tr.translate(x - (car.getWidth() / 2), y - (car.getHeight() / 2));
+		tr.translate(x, y);
 		tr.rotate(direction);
 		g2d.setTransform(tr);
 

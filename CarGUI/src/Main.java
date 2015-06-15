@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -12,7 +13,7 @@ public class Main extends JPanel {
 
 	public static Terrain t;
 	public static Car c;
-	public static CarSimulator sim = new CarSimulator(new Vector2D(300, 300), new Vector2D(1, 0));
+	public static CarSimulator sim = new CarSimulator(new Vector2D(50, 50), new Vector2D(1, 0));
 	public static CarDriver driver = new CarDriver(sim);
 	
 	public Main() {
@@ -23,7 +24,13 @@ public class Main extends JPanel {
 				
 				long last = System.currentTimeMillis();
 				driver = new CarDriver(sim);
-				driver.setGoal(new Vector2D(350, 350));
+				ArrayList<Vector2D> goals = new ArrayList<>();
+				goals.add(t.map[0][0].point);
+				goals.add(t.map[0][1].point);
+				goals.add(t.map[1][1].point);
+				goals.add(t.map[1][0].point);
+				driver.setGoalList(goals);
+				int step = 0;
 				while (true) {
 					
 					frame++;
@@ -53,7 +60,9 @@ public class Main extends JPanel {
 		/* TODO drawings */
 		t.draw(g);
 		g.setColor(Color.YELLOW);
-		g.drawLine((int)sim.position.x, (int)sim.position.y, (int)driver.goal.x, (int)driver.goal.y);
+		g.drawLine((int)sim.position.x, (int)sim.position.y,
+				(int)driver.goals.get(driver.currentGoal).x,
+				(int)driver.goals.get(driver.currentGoal).y);
 		c.draw(g);
 		
 	}
