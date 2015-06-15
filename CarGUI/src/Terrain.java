@@ -1,3 +1,5 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -10,7 +12,11 @@ import javax.imageio.ImageIO;
 public class Terrain {
 	public final String backgroundFilename = "grass.jpg";
 	public final String roadFilename = "road.jpg";
-	public final int roadWidth = 50;
+	public final int roadWidth = 70;
+
+	final static float dash1[] = { 10.0f };
+	final static BasicStroke dashed = new BasicStroke(1.0f,
+			BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
 
 	int n = 4;
 	TexturePaint backgroundTexture, roadTexture;
@@ -39,25 +45,69 @@ public class Terrain {
 		g2d.setPaint(roadTexture);
 
 		for (int i = 1; i < n; i++) {
+			g2d.setPaint(roadTexture);
 			g2d.fillRect((int) map[0][i - 1].point.x - roadWidth / 2,
 					(int) map[0][i - 1].point.y - roadWidth / 2,
 					(int) (map[0][i].point.x - map[0][i - 1].point.x),
 					roadWidth);
+
+			g2d.setColor(Color.WHITE);
+			g2d.setStroke(dashed);
+			g2d.drawLine((int) map[0][i - 1].point.x + roadWidth / 2,
+					(int) map[0][i - 1].point.y, (int) map[0][i].point.x
+							- roadWidth / 2, (int) map[0][i].point.y);
+
+			g2d.setPaint(roadTexture);
 			g2d.fillRect((int) map[i - 1][0].point.x - roadWidth / 2,
 					(int) map[i - 1][0].point.y - roadWidth / 2, roadWidth,
 					(int) (map[i][0].point.y - map[i - 1][0].point.y));
+
+			g2d.setColor(Color.WHITE);
+			g2d.setStroke(dashed);
+			g2d.drawLine((int) map[i - 1][0].point.x,
+					(int) map[i - 1][0].point.y + roadWidth / 2,
+					(int) map[i][0].point.x, (int) map[i][0].point.y
+							- roadWidth / 2);
 		}
 
 		for (int i = 1; i < n; i++) {
 			for (int j = 1; j < n; j++) {
-				g2d.fillRect((int) map[i][j - 1].point.x - roadWidth / 2,
+				g2d.setPaint(roadTexture);
+				g2d.fillRect(
+						(int) map[i][j - 1].point.x - roadWidth / 2,
 						(int) map[i][j - 1].point.y - roadWidth / 2,
 						(int) (map[i][j].point.x - map[i][j - 1].point.x + roadWidth),
 						roadWidth);
+				g2d.setColor(Color.WHITE);
+				g2d.setStroke(dashed);
+				g2d.drawLine((int) map[i][j - 1].point.x + roadWidth / 2,
+						(int) map[i][j - 1].point.y, (int) map[i][j].point.x
+								- roadWidth / 2, (int) map[i][j].point.y);
+
+				g2d.setPaint(roadTexture);
 				g2d.fillRect((int) map[i - 1][j].point.x - roadWidth / 2,
 						(int) map[i - 1][j].point.y - roadWidth / 2, roadWidth,
-						(int) (map[i][j].point.y - map[i - 1][j].point.y) + roadWidth);
+						(int) (map[i][j].point.y - map[i - 1][j].point.y)
+								+ roadWidth);
+
+				g2d.setColor(Color.WHITE);
+				g2d.setStroke(dashed);
+				g2d.drawLine((int) map[i - 1][j].point.x,
+						(int) map[i - 1][j].point.y + roadWidth / 2,
+						(int) map[i][j].point.x, (int) map[i][j].point.y
+								- roadWidth / 2);
 			}
 		}
+
+		//g2d.setColor(Color.WHITE);
+		//g2d.setStroke(new BasicStroke());
+		
+		//for (int i = 0; i < n; i++) {
+		//	for (int j = 0; j < n; j++) {
+		//		g2d.drawRect((int) map[i][j].point.x - roadWidth / 2,
+		//				(int) map[i][j].point.y - roadWidth / 2, roadWidth,
+		//				roadWidth);
+		//	}
+		//}
 	}
 }
