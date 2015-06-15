@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 public class Terrain {
 	public final String backgroundFilename = "grass.jpg";
 	public final String roadFilename = "road.jpg";
-	public final int roadWidth = 70;
+	public static final int roadWidth = 70;
 
 	final static float dash1[] = { 10.0f };
 	final static BasicStroke dashed = new BasicStroke(1.0f,

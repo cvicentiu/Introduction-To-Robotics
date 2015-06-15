@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class CarDriver {
 	CarSimulator sim;
 	ArrayList<Vector2D> goals;
+	ArrayList<Vector2D> origGoals;
 	int currentGoal = 0;
 	public CarDriver(CarSimulator sim) {
 		this.sim = sim;
@@ -12,19 +13,49 @@ public class CarDriver {
 	public void setGoalList(ArrayList<Vector2D> goals) {
 		
 		this.currentGoal = 0;
+		this.origGoals = goals;
 		ArrayList<Vector2D> adjustedGoals = new ArrayList<>();
 		for (int i = 0; i < goals.size(); i++) {
 			int prev = i - 1;
+			int next = i + 1;
 			if (prev < 0)
 				prev = goals.size() - 1;
+			if (next == goals.size())
+				next = 0;
+			
 			
 			Vector2D currG = goals.get(i);
 			Vector2D prevG = goals.get(prev);
+			Vector2D nextG = goals.get(next);
 			
 			if (currG.y - prevG.y > 0 && Math.abs(currG.y - prevG.y) > 1) {
-				adjustedGoals.add(new Vector2D(currG.x - (Terrain.roadWidth / 4), currG.y - (Terrain.roadWidth / 4)));
+				if (nextG.x - currG.x > 0 && Math.abs(nextG.x - currG.x) > 1) {
+					adjustedGoals.add(new Vector2D(currG.x - (Terrain.roadWidth / 4), currG.y + (Terrain.roadWidth / 4)));
+				} else {
+					adjustedGoals.add(new Vector2D(currG.x - (Terrain.roadWidth / 4), currG.y - (Terrain.roadWidth / 4)));
+				}
 			}
-			
+			else if (currG.y - prevG.y < 0 && Math.abs(currG.y - prevG.y) > 1) {
+				if (nextG.x - currG.x > 0 && Math.abs(nextG.x - currG.x) > 1) {
+					adjustedGoals.add(new Vector2D(currG.x + (Terrain.roadWidth / 4), currG.y + (Terrain.roadWidth / 4)));
+				} else {
+					adjustedGoals.add(new Vector2D(currG.x + (Terrain.roadWidth / 4), currG.y - (Terrain.roadWidth / 4)));
+				}
+			}
+			else if (currG.x - prevG.x < 0 && Math.abs(currG.x - prevG.x) > 1) {
+				if (nextG.y - currG.y > 0 && Math.abs(nextG.y - currG.y) > 1) {
+					adjustedGoals.add(new Vector2D(currG.x - (Terrain.roadWidth / 4), currG.y - (Terrain.roadWidth / 4)));
+				} else {
+					adjustedGoals.add(new Vector2D(currG.x + (Terrain.roadWidth / 4), currG.y - (Terrain.roadWidth / 4)));
+				}
+			}
+			else if (currG.x - prevG.x > 0 && Math.abs(currG.x - prevG.x) > 1) {
+				if (nextG.y - currG.y > 0 && Math.abs(nextG.y - currG.y) > 1) {
+					adjustedGoals.add(new Vector2D(currG.x - (Terrain.roadWidth / 4), currG.y + (Terrain.roadWidth / 4)));
+				} else {
+					adjustedGoals.add(new Vector2D(currG.x + (Terrain.roadWidth / 4), currG.y + (Terrain.roadWidth / 4)));
+				}
+			}
 			else
 				adjustedGoals.add(currG);
 		
@@ -43,24 +74,56 @@ public class CarDriver {
 		}
 		
 		double angle = Math.atan2(line.y, line.x) - Math.atan2(sim.forward.y, sim.forward.x);
-		System.out.println(Math.toDegrees(angle));
+		//System.out.println(Math.toDegrees(angle));
 		double angleDeg = Math.toDegrees(angle);
 		
-		double speed = 1;
-		if (Math.abs(line.x) + Math.abs(line.y) < 100) {
-			speed = -0.5;
+		double throttle = 1;
+		double dist = Math.abs(line.x) + Math.abs(line.y);
+		double targetSpeed = sim.maxSpeed;
+		if ( dist < 125) {
+			targetSpeed = sim.maxSpeed * 0.5;
+		}
+
+		boolean collision = false;
+		int number = -1;
+		for (int i = 0; i  < Main.sim.length; i++) {
+			if (this.sim == Main.sim[i]) {
+				number = i;
+				continue;
+			}
+				
+			
+			Vector2D lineOther =  new Vector2D(Main.sim[i].position);
+			lineOther.x = origGoals.get(currentGoal).x - lineOther.x;
+			lineOther.y = origGoals.get(currentGoal).y - lineOther.y;
+			if (Math.abs(lineOther.x) + Math.abs(lineOther.y) < 60)
+				collision = true;
+		}
+		if (Math.abs(line.x) + Math.abs(line.y) < 100 &&
+			collision)
+		{
+			System.out.println( " PANIC " + number);
+			targetSpeed = 0;
 		}
 		
-		System.out.println(speed);
+		if (sim.speed > targetSpeed) {
+			throttle = -1;
+		} else {
+			throttle = +1;
+		}
+		
+
+		
+		//System.out.println(sim.speed + " " + throttle);
 		if ((angleDeg > 7 && angleDeg < 180) || angleDeg < -187) {
-			System.out.println("Right");
-			sim.giveCommand(1, speed);
+			//System.out.println("Right");
+			sim.giveCommand(1, throttle);
 		} else if ((angleDeg < - 7 && angleDeg > -180) || angleDeg > 187){
-			System.out.println("Left");
-			sim.giveCommand(-1, speed);
+			//System.out.println("Left");
+			sim.giveCommand(-1, throttle);
 		} else {
 			sim.steeringAmplitude = 0;
-			sim.giveCommand(0, speed);
+			sim.giveCommand(0, throttle);
 		}
 	}
 }
