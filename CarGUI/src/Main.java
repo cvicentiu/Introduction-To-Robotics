@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
@@ -41,6 +42,7 @@ public class Main extends JPanel {
 		goals.add(t.map[3][0].point);
 		goals.add(t.map[2][0].point);
 		goals.add(t.map[1][0].point);
+
 		driver[0].setGoalList(goals);
 		
 		goals = new ArrayList<>();
@@ -100,6 +102,26 @@ public class Main extends JPanel {
 					
 					frame++;
 					
+					for (int i = 0 ; i < Terrain.inIntersection.length; i++) {
+						for (int j = 0; j < Terrain.inIntersection[i].length; j++) {
+							for (int agent = 0; agent < sim.length; agent++) {
+								
+								Vector2D pos = sim[agent].position;
+								Vector2D intPos = t.map[i][j].point;
+								double dist = Math.abs(pos.x - intPos.x) + Math.abs(pos.y - intPos.y);
+								LinkedList<CarSimulator> l = Terrain.inIntersection[i][j];
+								if (dist < Terrain.roadWidth + 30) { // Magic Threshold
+									if (!l.contains(sim[agent])) {
+										l.add(sim[agent]);
+									}
+								} else {
+									if (l.contains(sim[agent])) {
+										l.remove(sim[agent]);
+									}
+								}
+							}
+						}
+					}
 					for (int i = 0 ; i < driver.length; i++)
 						driver[i].controlCar();
 					pause(10);

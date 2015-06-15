@@ -82,5 +82,14 @@ public class CarSimulator {
 		position.x += forward.x * speed * timeDeltaMs / 1000;
 		position.y += forward.y * speed * timeDeltaMs / 1000;
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		return false;
+	}
+	
 	
 }

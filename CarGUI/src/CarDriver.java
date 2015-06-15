@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class CarDriver {
@@ -86,24 +87,14 @@ public class CarDriver {
 
 		boolean collision = false;
 		int number = -1;
-		for (int i = 0; i  < Main.sim.length; i++) {
-			if (this.sim == Main.sim[i]) {
-				number = i;
-				continue;
+		
+		for (int i = 0; i < Terrain.inIntersection.length; i++) {
+			for (int j = 0; j < Terrain.inIntersection[i].length; j++) {
+				LinkedList<CarSimulator> l = Terrain.inIntersection[i][j];
+				if (l.contains(sim) && l.get(0) != sim) {
+					targetSpeed = 0;
+				}
 			}
-				
-			
-			Vector2D lineOther =  new Vector2D(Main.sim[i].position);
-			lineOther.x = origGoals.get(currentGoal).x - lineOther.x;
-			lineOther.y = origGoals.get(currentGoal).y - lineOther.y;
-			if (Math.abs(lineOther.x) + Math.abs(lineOther.y) < 60)
-				collision = true;
-		}
-		if (Math.abs(line.x) + Math.abs(line.y) < 100 &&
-			collision)
-		{
-			System.out.println( " PANIC " + number);
-			targetSpeed = 0;
 		}
 		
 		if (sim.speed > targetSpeed) {

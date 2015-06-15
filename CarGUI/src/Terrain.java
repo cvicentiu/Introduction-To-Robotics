@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -21,18 +22,23 @@ public class Terrain {
 	int n = 4;
 	TexturePaint backgroundTexture, roadTexture;
 	Intersection[][] map;
+	public static LinkedList<CarSimulator> inIntersection[][];
 
 	public Terrain() throws IOException {
 		backgroundTexture = new TexturePaint(ImageIO.read(new File(
 				backgroundFilename)), new Rectangle(0, 0, 32, 32));
 		roadTexture = new TexturePaint(ImageIO.read(new File(roadFilename)),
 				new Rectangle(0, 0, 32, 32));
+		inIntersection = new LinkedList[n][n];
+		
 		map = new Intersection[n][n];
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				map[i][j] = new Intersection(new Vector2D(j * 500 / 3 + 50,
 						i * 500 / 3 + 50));
+				inIntersection[i][j] = new LinkedList<>();
 			}
+			
 		}
 	}
 
