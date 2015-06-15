@@ -88,8 +88,17 @@ public class CarDriver {
 		boolean collision = false;
 		int number = -1;
 		
+		int[] skipI = {0, 0, 3, 3};
+		int[] skipJ = {0, 3, 0, 3};
 		for (int i = 0; i < Terrain.inIntersection.length; i++) {
 			for (int j = 0; j < Terrain.inIntersection[i].length; j++) {
+				boolean skip = false;
+				for (int k = 0; k < skipI.length; k++) {
+					if (i == skipI[k] && j == skipJ[k])
+						skip = true;
+				}
+				if (skip)
+					continue;
 				LinkedList<CarSimulator> l = Terrain.inIntersection[i][j];
 				if (l.contains(sim) && l.get(0) != sim) {
 					targetSpeed = 0;

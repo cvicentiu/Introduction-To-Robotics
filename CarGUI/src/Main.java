@@ -110,7 +110,7 @@ public class Main extends JPanel {
 								Vector2D intPos = t.map[i][j].point;
 								double dist = Math.abs(pos.x - intPos.x) + Math.abs(pos.y - intPos.y);
 								LinkedList<CarSimulator> l = Terrain.inIntersection[i][j];
-								if (dist < Terrain.roadWidth + 30) { // Magic Threshold
+								if (dist < Terrain.roadWidth + 20) { // Magic Threshold
 									if (!l.contains(sim[agent])) {
 										l.add(sim[agent]);
 									}

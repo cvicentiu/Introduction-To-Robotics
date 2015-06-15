@@ -43,7 +43,7 @@ public class CarSimulator {
 	double maxSteeringAngle = Math.toRadians(2);
 	double sideToSideSteeringTime = 200;
 	double maxAcceleration = 20;
-	double maxDecceleration = 40;
+	double maxDecceleration = 60;
 	
 
 	public void giveCommand(double steeringForce, double throttle) {
