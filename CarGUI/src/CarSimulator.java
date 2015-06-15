@@ -10,6 +10,11 @@ class Vector2D {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Vector2D(Vector2D clone) {
+		x = clone.x;
+		y = clone.y;
+	}
 }
 
 public class CarSimulator {
@@ -36,7 +41,7 @@ public class CarSimulator {
 	// Limitations.
 	double maxSpeed = 100;
 	double maxSteeringAngle = Math.toRadians(2);
-	double sideToSideSteeringTime = 3000;
+	double sideToSideSteeringTime = 200;
 	double maxAcceleration = 20;
 	double maxDecceleration = 40;
 	

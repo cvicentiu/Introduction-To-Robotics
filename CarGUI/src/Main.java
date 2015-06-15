@@ -13,6 +13,7 @@ public class Main extends JPanel {
 	public static Terrain t;
 	public static Car c;
 	public static CarSimulator sim = new CarSimulator(new Vector2D(300, 300), new Vector2D(1, 0));
+	public static CarDriver driver = new CarDriver(sim);
 	
 	public Main() {
 		Thread animationThread = new Thread() {
@@ -21,13 +22,16 @@ public class Main extends JPanel {
 				int frame = 0;
 				
 				long last = System.currentTimeMillis();
+				driver = new CarDriver(sim);
+				driver.setGoal(new Vector2D(350, 350));
 				while (true) {
 					
 					frame++;
-					sim.giveCommand(/*Math.signum(Math.sin((frame- 1) / 88.0f) - Math.sin(frame / 88.0f))*/0, 1);
-					long current = System.currentTimeMillis();	
-					sim.executeCommand(current-last);
-					
+					driver.controlCar();
+					//sim.giveCommand(/*Math.signum(Math.sin((frame- 1) / 88.0f) - Math.sin(frame / 88.0f))*/0, 1);
+					long current = System.currentTimeMillis();
+					pause(10);
+					sim.executeCommand(10);
 					c.x = (int) Math.round(sim.position.x);
 					c.y = (int) Math.round(sim.position.y);
 					c.direction = Math.PI + Math.atan2(sim.forward.y, sim.forward.x);
@@ -48,7 +52,10 @@ public class Main extends JPanel {
 
 		/* TODO drawings */
 		t.draw(g);
+		g.setColor(Color.YELLOW);
+		g.drawLine((int)sim.position.x, (int)sim.position.y, (int)driver.goal.x, (int)driver.goal.y);
 		c.draw(g);
+		
 	}
 
 	public static void init() throws IOException {
