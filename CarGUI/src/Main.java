@@ -21,16 +21,19 @@ public class Main extends JPanel {
 			public void run() {
 				int frame = 0;
 				
+				long last = System.currentTimeMillis();
 				while (true) {
+					
 					frame++;
-					sim.giveCommand(Math.signum(Math.sin((frame- 1) / 88.0f) - Math.sin(frame / 88.0f)), 1);
-					pause(10);					
-					sim.executeCommand(10);
+					sim.giveCommand(/*Math.signum(Math.sin((frame- 1) / 88.0f) - Math.sin(frame / 88.0f))*/0, 1);
+					long current = System.currentTimeMillis();	
+					sim.executeCommand(current-last);
 					
 					c.x = (int) Math.round(sim.position.x);
 					c.y = (int) Math.round(sim.position.y);
 					c.direction = Math.PI + Math.atan2(sim.forward.y, sim.forward.x);
 					repaint();
+					last = current;
 				}
 			};
 		};
